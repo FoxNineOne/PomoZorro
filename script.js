@@ -46,12 +46,13 @@ let restTime = 5; // This  will also be set on the page
 let screenStatus = "Paused";
 let paused = false;
 
-//Time Field
-let textArea = document.createElement("textarea"); // Create textarea
-document.body.append(textArea); // Add it to the page
-// Mode Field
-let modeField = document.createElement("textarea"); // Create textarea
-document.body.append(modeField); // Add it to the page
+let timerArea = document.getElementById("countdowntimer");
+let clockField = document.getElementById("clockField");
+let modeField = document.getElementById("modeField");
+
+clockField.textContent = "00:00";
+modeField.textContent = "Paused";
+
 /*
 COMING SOON - BUTTONS! 
 // Start Button
@@ -69,16 +70,21 @@ btnReset.textContent = "Reset";
 
 */
 
+//Functions
+// This function will develop further, switching screen style, possibly audio volume, and playlist?
 const modeTheme = function (mode) {
   switch (mode) {
     case "work":
       screenStatus = "Working";
+      timerArea.style.backgroundColor = "lightblue";
       break;
     case "rest":
       screenStatus = "Resting";
+      timerArea.style.backgroundColor = "ligtgreen";
       break;
     default:
       screenStatus = "Paused";
+      timerArea.style.backgroundColor = "lightyellow";
   }
   console.log(screenStatus);
 
@@ -86,6 +92,12 @@ const modeTheme = function (mode) {
   console.log(`${mode} theme`);
   //WHEN TIMER = 0 , flip the other timer on
   // startTimer( mode === "work" ? "rest" : "work")
+};
+
+const modeTransition = function (outMode) {
+  /* copilot is getting in the way a bit, how am I meant to learn when it's lkike an obnoxious nerd, just correcting me before I begin?*/
+  //When the outgoing mode (outMode) is work, then it will transition for 15 seconds before moving onto rest, and vice versa.
+  // Kinda like a toggle
 };
 
 function startCountdown(timeLimit, mode) {
@@ -107,8 +119,10 @@ function startCountdown(timeLimit, mode) {
     let seconds = Math.floor((remainingTime % 60000) / 1000); // Get the remaining seconds
 
     // Display the remaining time in MM:SS format
-    modeField.value = `${screenStatus.toUpperCase()}`;
-    textArea.value = `   ${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+    modeField.textContent = `${screenStatus.toUpperCase()}`;
+    clockField.textContent = `   ${minutes}:${
+      seconds < 10 ? "0" + seconds : seconds
+    }`;
     // console.log(`${minutes}:${seconds < 10 ? "0" + seconds : seconds}`);
 
     // Decrease the remaining time by 1 second (1000 milliseconds)
@@ -122,6 +136,8 @@ function startCountdown(timeLimit, mode) {
     // If the countdown reaches zero, stop the timer
     if (remainingTime <= 0) {
       clearInterval(intervalId); // Clear the interval
+
+      //temp, this will change to toggle, (if work, then rest, vice versa)
       textArea.value = "Time's up!";
       console.log("Time's up!");
     }

@@ -1,0 +1,47 @@
+h1 {
+  text-align: center;
+}
+
+h3 {
+  text-align: center;
+}
+
+#countdowntimer {
+  display: block;
+  background-color: blueviolet;
+  color: white;
+}
+
+#clockField {
+  text-align: center;
+  font-weight: bold;
+  font-size: 500%;
+  display: block;
+}
+
+#modeField {
+  text-align: center;
+  font-weight: bold;
+  font-size: 400%;
+  display: block;
+}
+
+.btn--text {
+  text-align: center;
+  color: white;
+  background-color: lightgreen; /* Can always look into making this darker or change when pause button is activated.. but the pause button will be redundant later on */
+  font-weight: bold;
+  display: inline-block;
+  font-size: 250%;
+}
+
+.btn--container {
+  text-align: center; /* Center-aligns the button inside the container */
+}
+
+.workingTheme {
+  background-color: lightgreen;
+  color: white;
+  --gradient-primary: linear-gradient(to top left, #39b385, #9be15d);
+  --gradient-secondary: linear-gradient(to top left, #ffb003, #ffcb03);
+}
