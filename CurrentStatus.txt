@@ -1,0 +1,33 @@
+Functionality
+================
+	BUG: Issue with style changing a second before mode changes (temp patch, wrap in a setTineout)
+
+X 	Add timer inputs 
+	? that auto set from screen to variables in js
+		- if not, add submit button.
+	Add button to show/hide timer inputs
+	
+	(Audio) Find out how to load and play one song
+	(Audio) Can audio information be pulled from MP3 or shall I build a database?
+	(Audio) Make a Playlist/Playlist Object	
+
+Visual/Cosmetic
+================
+	Icon / circle to surround clock and status?
+	ClockTimer div and children to flashes opacity softly when pause === true
+	Look at gradient colouring 
+
+	Check noob html styling (not code but visual) videos
+		Find a nice font
+		Golden Rule the font sizes
+		X Look at nicer colour scheme
+
+	Add Spotify link. 
+	Add YouTube Link. 
+	Add GitHub link. 
+
+	(Audio) Pull playlist onto screen? 
+	(Audio) Make playlist appear, disappear dependant on buttons press 
+	(Audio) Skip buttons
+	(Audio) Scroll bar
+
