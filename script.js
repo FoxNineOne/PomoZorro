@@ -40,18 +40,30 @@ function convertToMilliseconds(minutes) {
 }
 */
 
+const body = document.body;
+
 let currentTime = new Date().getTime(); // Milliseconds since Unix epoch
-let workTime = 25; // This will be set on the page
-let restTime = 5; // This  will also be set on the page
 let screenStatus = "Paused";
 let paused = false;
-
+let prePausedMode;
 let timerArea = document.getElementById("countdowntimer");
 let clockField = document.getElementById("clockField");
 let modeField = document.getElementById("modeField");
+const btnPause = document.getElementById("btnPause");
 
+//Vairables for the timer - now needed globally
+let hasBegun = false; //needed  for initial deployment
+let intervalId = null;
+let remainingTime = 0;
+
+//Initalise text fields
 clockField.textContent = "00:00";
-modeField.textContent = "Paused";
+modeField.textContent = "";
+
+//custom times that hopefully I'll retrieve from end user
+let workTime = 0.1; // This will be set on the page
+let restTime = 0.1; // This  will also be set on the page
+let transTime = 0.05;
 
 /*
 COMING SOON - BUTTONS! 
@@ -74,19 +86,26 @@ btnReset.textContent = "Reset";
 // This function will develop further, switching screen style, possibly audio volume, and playlist?
 const modeTheme = function (mode) {
   switch (mode) {
-    case "work":
-      screenStatus = "Working";
-      timerArea.style.backgroundColor = "lightblue";
+    case "working":
+      screenStatus = "working";
+      body.style.backgroundColor = "#4bb3fd";
+      paused = false;
       break;
-    case "rest":
-      screenStatus = "Resting";
-      timerArea.style.backgroundColor = "ligtgreen";
+    case "resting":
+      screenStatus = "resting";
+      body.style.backgroundColor = "#c2aff0";
+      paused = false;
+      break;
+    case "transition":
+      screenStatus = "transition";
+      body.style.backgroundColor = "#e2b6cf";
+      paused = false;
       break;
     default:
-      screenStatus = "Paused";
-      timerArea.style.backgroundColor = "lightyellow";
+      screenStatus = "paused";
+      body.style.backgroundColor = "#b0c4b1";
+      paused = true;
   }
-  console.log(screenStatus);
 
   // BEGIN TIMER
   console.log(`${mode} theme`);
@@ -94,55 +113,91 @@ const modeTheme = function (mode) {
   // startTimer( mode === "work" ? "rest" : "work")
 };
 
-const modeTransition = function (outMode) {
-  /* copilot is getting in the way a bit, how am I meant to learn when it's lkike an obnoxious nerd, just correcting me before I begin?*/
-  //When the outgoing mode (outMode) is work, then it will transition for 15 seconds before moving onto rest, and vice versa.
-  // Kinda like a toggle
-};
-
+//Start Timer Function
 function startCountdown(timeLimit, mode) {
-  // This will be used to change bg and colour themes later
+  return new Promise((resolve) => {
+    // Convert the time limit (in minutes) to milliseconds
+    remainingTime = timeLimit * 60 * 1000;
 
-  modeTheme(mode);
-
-  // Convert the time limit (in minutes) to milliseconds
-  let remainingTime = timeLimit * 60 * 1000;
-
-  // Set up an interval to update the countdown every second
-  // The setInterval() function runs a function every 1 second
-  // We can then return back the remaining Time to show on screen
-  const intervalId = setInterval(() => {
-    // Calculate the remaining minutes and seconds
-    // Math.floor returns integers, always rounds down.
-
-    let minutes = Math.floor(remainingTime / 60000); // 1 minute = 60,000 milliseconds
-    let seconds = Math.floor((remainingTime % 60000) / 1000); // Get the remaining seconds
-
-    // Display the remaining time in MM:SS format
-    modeField.textContent = `${screenStatus.toUpperCase()}`;
-    clockField.textContent = `   ${minutes}:${
-      seconds < 10 ? "0" + seconds : seconds
-    }`;
-    // console.log(`${minutes}:${seconds < 10 ? "0" + seconds : seconds}`);
-
-    // Decrease the remaining time by 1 second (1000 milliseconds)
-    remainingTime -= 1000;
-
-    // If Paused = true.. pause!
-    if (paused) {
-      return;
+    // Clear the old interval if exists, otherwise ghosts appear
+    if (intervalId) {
+      clearInterval(intervalId);
     }
 
-    // If the countdown reaches zero, stop the timer
-    if (remainingTime <= 0) {
-      clearInterval(intervalId); // Clear the interval
+    // Set up an interval to update the countdown every second
+    // The setInterval() function runs a function every 1 second
+    // We can then return back the remaining Time to show on screen
+    prePausedMode = screenStatus; // This is to resume following a pause
+    modeTheme(mode); // This will be used to change bg and colour themes later
 
-      //temp, this will change to toggle, (if work, then rest, vice versa)
-      textArea.value = "Time's up!";
-      console.log("Time's up!");
-    }
-  }, 1000); // Update the countdown every second (1000 milliseconds)
+    intervalId = setInterval(() => {
+      // Calculate the remaining minutes and seconds
+      // Math.floor returns integers, always rounds down.
+      let minutes = Math.floor(remainingTime / 60000); // 1 minute = 60,000 milliseconds
+      let seconds = Math.floor((remainingTime % 60000) / 1000); // Get the remaining seconds
+
+      // Display the remaining time in MM:SS format
+      modeField.textContent = `${screenStatus.toUpperCase()}`;
+      clockField.textContent = `   ${minutes}:${
+        seconds < 10 ? "0" + seconds : seconds
+      }`;
+
+      // If Paused = true.. pause!
+      if (paused) {
+        return;
+      } else {
+        // Decrease the remaining time by 1 second (1000 milliseconds)
+        remainingTime -= 1000;
+      }
+
+      // If the countdown reaches zero, stop the timer
+      if (remainingTime <= -1) {
+        //temp, this will change to toggle, (if work, then rest, vice versa)
+        clockField.textContent = "00:00";
+        //modeField.textContent = "";
+        clearInterval(intervalId); // Clear the interval
+
+        //BUG: This starts a second early..
+        //modeTransition(screenStatus);
+
+        resolve();
+      }
+    }, 1000);
+    // Update the countdown every second (1000 milliseconds)
+  });
 }
 
-// Example usage: Start a countdown for 5 minutes
-startCountdown(5, "work"); // Countdown timer for 5 minutes
+//Loop Function
+async function loopTimers() {
+  while (true) {
+    await startCountdown(workTime, "working"); //Work Phase
+    await startCountdown(transTime, "transition"); //Transition Phase
+    await startCountdown(restTime, "resting"); // Rest Phase
+    await startCountdown(transTime, "transition"); //Transition Phase
+  }
+}
+
+//Pause Button Functionality
+btnPause.addEventListener("click", async function () {
+  //console.log("button click has changed to", paused);
+
+  if (hasBegun === false) {
+    //startCountdown(workTime, "working"); // Countdown timer for 5 minutes
+    hasBegun = true; // for it has, begun!
+    btnPause.textContent = "Click to Pause";
+    loopTimers(); //Call the loop function
+    return;
+  }
+
+  if (paused === false) {
+    prePausedMode = screenStatus;
+    console.log("prePausedMode: ", prePausedMode);
+    paused = true;
+    btnPause.textContent = "Paused";
+    modeTheme("paused");
+  } else {
+    paused = false;
+    btnPause.textContent = "Click to Pause";
+    modeTheme(prePausedMode);
+  }
+});

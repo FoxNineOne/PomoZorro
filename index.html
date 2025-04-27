@@ -9,7 +9,7 @@
 <body>
   <h1>PomoZorro</h1>
   <h3 align="center">
-    A work in progress, by
+    A work in progress Pomodoro Timer, by
     <a target="_blank" href="https://github.com/FoxNineOne">FoxNineOne</a>
   </h3>
   <br /><br />
@@ -20,11 +20,22 @@
 
     <span id="modeField"> Mode Field </span>
     <br />
+    <div class="btn--container">
+      <button id="btnPause" class="btn--text">Click to Start</button>
+    </div>
+  </div>
+  <br />
+  <div id="timeSettings" align="center">
+    <input type="number" id="workTime" value="25" min="1" max="60" step="1" />
+    <br />
+    work <br />
+    <input type="number" id="Rest Time" value="5" min="1" max="60" step="1" />
+    <br />
+    rest <br />
+    <!--  Need to find out if these fields can dynamically update the logic in js, or will I need a button to submit new values to js variables  -->
+
+    <!-- Create button to hide/show time options -->
   </div>
 
-  <br /><br />
-  <div class="btn--container">
-    <button class="btn--text">Pause</button>
-  </div>
   <script src="script.js"></script>
 </body>

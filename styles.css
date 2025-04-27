@@ -1,26 +1,24 @@
 h1 {
   text-align: center;
+  color: 585481;
 }
 
 h3 {
   text-align: center;
+  color: 585481;
 }
 
-#countdowntimer {
-  display: block;
-  background-color: blueviolet;
-  color: white;
+body {
+  background-color: b0c4b1;
 }
 
 #clockField {
-  text-align: center;
   font-weight: bold;
   font-size: 500%;
   display: block;
 }
 
 #modeField {
-  text-align: center;
   font-weight: bold;
   font-size: 400%;
   display: block;
@@ -29,7 +27,7 @@ h3 {
 .btn--text {
   text-align: center;
   color: white;
-  background-color: lightgreen; /* Can always look into making this darker or change when pause button is activated.. but the pause button will be redundant later on */
+  background-color: 585481; /* Can always look into making this darker or change when pause button is activated.. but the pause button will be redundant later on */
   font-weight: bold;
   display: inline-block;
   font-size: 250%;
@@ -44,4 +42,14 @@ h3 {
   color: white;
   --gradient-primary: linear-gradient(to top left, #39b385, #9be15d);
   --gradient-secondary: linear-gradient(to top left, #ffb003, #ffcb03);
+}
+
+#countdowntimer {
+  color: white;
+  display: inline;
+  text-align: center;
+  background: url("img/whiteCircle.png"), red;
+  background-size: cover; /* Ensures the image covers the element */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-position: center; /* Centers the image */
 }
