@@ -1,0 +1,55 @@
+h1 {
+  text-align: center;
+  color: 585481;
+}
+
+h3 {
+  text-align: center;
+  color: 585481;
+}
+
+body {
+  background-color: b0c4b1;
+}
+
+#clockField {
+  font-weight: bold;
+  font-size: 500%;
+  display: block;
+}
+
+#modeField {
+  font-weight: bold;
+  font-size: 400%;
+  display: block;
+}
+
+.btn--text {
+  text-align: center;
+  color: white;
+  background-color: 585481; /* Can always look into making this darker or change when pause button is activated.. but the pause button will be redundant later on */
+  font-weight: bold;
+  display: inline-block;
+  font-size: 250%;
+}
+
+.btn--container {
+  text-align: center; /* Center-aligns the button inside the container */
+}
+
+.workingTheme {
+  background-color: lightgreen;
+  color: white;
+  --gradient-primary: linear-gradient(to top left, #39b385, #9be15d);
+  --gradient-secondary: linear-gradient(to top left, #ffb003, #ffcb03);
+}
+
+#countdowntimer {
+  color: white;
+  display: inline;
+  text-align: center;
+  background: url("img/whiteCircle.png"), red;
+  background-size: cover; /* Ensures the image covers the element */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-position: center; /* Centers the image */
+}
