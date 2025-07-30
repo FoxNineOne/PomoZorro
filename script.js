@@ -49,14 +49,20 @@ let prePausedMode;
 let timerArea = document.getElementById("countdowntimer");
 let clockField = document.getElementById("clockField");
 let modeField = document.getElementById("modeField");
-const btnPause = document.getElementById("btnPause");
+
+// Pause Button
+const btnStartPause = document.getElementById("btnStartPause");
+// Reset Button
+const btnReset = document.getElementById("btnReset");
 
 //Vairables for the timer - now needed globally
-let hasBegun = false; //needed  for initial deployment
+let hasStartedLoop = false; //needed  for initial deployment
 let intervalId = null;
 let remainingTime = 0;
 
-//Initalise text fields
+let shouldStop = false; // Needed for reset button. tells the loop to stop
+
+//Initalise text fields - will connect to variables when done testing
 clockField.textContent = "00:00";
 modeField.textContent = "";
 
@@ -64,23 +70,6 @@ modeField.textContent = "";
 let workTime = 0.1; // This will be set on the page
 let restTime = 0.1; // This  will also be set on the page
 let transTime = 0.05;
-
-/*
-COMING SOON - BUTTONS! 
-// Start Button
-let btnStart = document.createElement("button"); // Create textarea
-document.body.append(btnStart);
-btnStart.textContent = "Start";
-// Pause Button
-let btnPause = document.createElement("button"); // Create textarea
-document.body.append(btnPause);
-btnPause.textContent = "Pause";
-// Reset Button
-let btnReset = document.createElement("button"); // Create textarea
-document.body.append(btnReset);
-btnReset.textContent = "Reset";
-
-*/
 
 //Functions
 // This function will develop further, switching screen style, possibly audio volume, and playlist?
@@ -116,6 +105,8 @@ const modeTheme = function (mode) {
 //Start Timer Function
 function startCountdown(timeLimit, mode) {
   return new Promise((resolve) => {
+    // let hasStarted = false;
+
     // Convert the time limit (in minutes) to milliseconds
     remainingTime = timeLimit * 60 * 1000;
 
@@ -127,10 +118,39 @@ function startCountdown(timeLimit, mode) {
     // Set up an interval to update the countdown every second
     // The setInterval() function runs a function every 1 second
     // We can then return back the remaining Time to show on screen
+
+    modeTheme(mode);
     prePausedMode = screenStatus; // This is to resume following a pause
-    modeTheme(mode); // This will be used to change bg and colour themes later
+
+    updateDisplay();
 
     intervalId = setInterval(() => {
+      // If Paused = true.. pause!
+      if (paused) {
+        return;
+      } else {
+        // Decrease the remaining time by 1 second (1000 milliseconds)
+
+        remainingTime -= 1000;
+      }
+      updateDisplay();
+
+      // If the countdown reaches zero, stop the timer
+      if (remainingTime <= -1) {
+        //temp, this will change to toggle, (if work, then rest, vice versa)
+        clockField.textContent = "00:00";
+        //modeField.textContent = "";
+        clearInterval(intervalId); // Clear the interval
+
+        //BUG: This starts a second early..
+        //modeTransition(screenStatus);
+        resolve();
+      }
+    }, 1000);
+
+    function updateDisplay() {
+      //moving these to a function has fixed the mode change before timer start bug
+
       // Calculate the remaining minutes and seconds
       // Math.floor returns integers, always rounds down.
       let minutes = Math.floor(remainingTime / 60000); // 1 minute = 60,000 milliseconds
@@ -142,62 +162,72 @@ function startCountdown(timeLimit, mode) {
         seconds < 10 ? "0" + seconds : seconds
       }`;
 
-      // If Paused = true.. pause!
-      if (paused) {
-        return;
-      } else {
-        // Decrease the remaining time by 1 second (1000 milliseconds)
-        remainingTime -= 1000;
-      }
-
-      // If the countdown reaches zero, stop the timer
-      if (remainingTime <= -1) {
-        //temp, this will change to toggle, (if work, then rest, vice versa)
-        clockField.textContent = "00:00";
-        //modeField.textContent = "";
-        clearInterval(intervalId); // Clear the interval
-
-        //BUG: This starts a second early..
-        //modeTransition(screenStatus);
-
-        resolve();
-      }
-    }, 1000);
-    // Update the countdown every second (1000 milliseconds)
+      // Update the countdown every second (1000 milliseconds)
+    }
   });
 }
 
 //Loop Function
 async function loopTimers() {
-  while (true) {
-    await startCountdown(workTime, "working"); //Work Phase
-    await startCountdown(transTime, "transition"); //Transition Phase
-    await startCountdown(restTime, "resting"); // Rest Phase
-    await startCountdown(transTime, "transition"); //Transition Phase
+  shouldStop = false; // Clear stop flag when starting fresh
+
+  while (!shouldStop) {
+    modeTheme("working");
+    await startCountdown(workTime, "working");
+    if (shouldStop) break;
+    modeTheme("transition");
+    await startCountdown(transTime, "transition");
+    if (shouldStop) break;
+    modeTheme("resting");
+    await startCountdown(restTime, "resting");
+    if (shouldStop) break;
+    modeTheme("transition");
+    await startCountdown(transTime, "transition");
+    if (shouldStop) break;
   }
 }
 
 //Pause Button Functionality
-btnPause.addEventListener("click", async function () {
+btnStartPause.addEventListener("click", async function () {
   //console.log("button click has changed to", paused);
 
-  if (hasBegun === false) {
+  if (!hasStartedLoop) {
     //startCountdown(workTime, "working"); // Countdown timer for 5 minutes
-    hasBegun = true; // for it has, begun!
-    btnPause.textContent = "Click to Pause";
+    hasStartedLoop = true; // for it has, begun!
+    paused = false;
+    btnStartPause.textContent = "Pause";
+    btnReset.textContent = "Reset";
     loopTimers(); //Call the loop function
     return;
   }
 
-  if (paused === false) {
+  if (!paused) {
     prePausedMode = screenStatus;
-    console.log("prePausedMode: ", prePausedMode);
+    // console.log("prePausedMode: ", prePausedMode);
     paused = true;
-    btnPause.textContent = "Paused";
+    btnStartPause.textContent = "Resume";
     modeTheme("paused");
   } else {
     paused = false;
-    btnPause.textContent = "Click to Pause";
+    btnStartPause.textContent = "Pause";
     modeTheme(prePausedMode);
   }
+});
+
+btnReset.addEventListener("click", function () {
+  console.log(`Resetting`);
+
+  shouldStop = true; // Stop the loopTimer
+  if (intervalId) clearInterval(intervalId); // Stop CountdownTimer.. why did I named it intervalId?
+  intervalId = null;
+
+  paused = false;
+  hasStartedLoop = false;
+  remainingTime = 0;
+
+  clockField.textContent = "00:00";
+  modeField.textContent = ">_<";
+  body.style.backgroundColor = "#b0c4b1";
+  btnStartPause.textContent = "Start";
+  btnReset.textContent = "  .  ";
 });
