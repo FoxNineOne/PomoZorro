@@ -39,6 +39,7 @@ function convertToMilliseconds(minutes) {
   return minutes * 60 * 1000; // Convert minutes to milliseconds
 }
 */
+"use strict";
 
 const body = document.body;
 
@@ -195,6 +196,7 @@ btnStartPause.addEventListener("click", async function () {
     //startCountdown(workTime, "working"); // Countdown timer for 5 minutes
     hasStartedLoop = true; // for it has, begun!
     paused = false;
+    wavesurfer.play();
     btnStartPause.textContent = "Pause";
     btnReset.textContent = "Reset";
     loopTimers(); //Call the loop function
@@ -205,10 +207,12 @@ btnStartPause.addEventListener("click", async function () {
     prePausedMode = screenStatus;
     // console.log("prePausedMode: ", prePausedMode);
     paused = true;
+    wavesurfer.pause();
     btnStartPause.textContent = "Resume";
     modeTheme("paused");
   } else {
     paused = false;
+    wavesurfer.play();
     btnStartPause.textContent = "Pause";
     modeTheme(prePausedMode);
   }
@@ -231,3 +235,12 @@ btnReset.addEventListener("click", function () {
   btnStartPause.textContent = "Start";
   btnReset.textContent = "  .  ";
 });
+
+const wavesurfer = WaveSurfer.create({
+  container: "#waveform",
+  waveColor: "violet",
+  progressColor: "purple",
+  backend: "MediaElement",
+});
+
+wavesurfer.load("/tracks/ZorroSonburu.mp3");

@@ -15,7 +15,6 @@
   <br /><br />
   <div id="countdowntimer">
     <span id="clockField"> Clock </span>
-
     <p align="center">_______________</p>
 
     <span id="modeField"> Mode Field </span>
@@ -33,10 +32,13 @@
     <input type="number" id="restTime" value="5" min="1" max="60" step="1" />
     <br />
     rest <br />
+
+    <div id="waveform"></div>
+
     <!--  Need to find out if these fields can dynamically update the logic in js, or will I need a button to submit new values to js variables  -->
 
     <!-- Create button to hide/show time options -->
+    <script src="https://unpkg.com/wavesurfer.js"></script>
+    <script src="script.js"></script>
   </div>
-
-  <script src="script.js"></script>
 </body>
