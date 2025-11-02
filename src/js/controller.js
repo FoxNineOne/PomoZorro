@@ -42,28 +42,16 @@ function convertToMilliseconds(minutes) {
 "use strict";
 import * as config from "./config.js";
 import * as model from "./model.js";
+import * as view from "./view.js";
 
-const body = document.body;
+const wavesurfer = WaveSurfer.create({
+  container: "#waveform",
+  waveColor: "violet",
+  progressColor: "purple",
+  backend: "MediaElement",
+});
 
-let currentTime = new Date().getTime(); // Milliseconds since Unix epoch
-let screenStatus = "paused";
-let paused = false;
-let prePausedMode;
-let timerArea = document.getElementById("countdowntimer");
-let clockField = document.getElementById("clockField");
-let modeField = document.getElementById("modeField");
-
-// Pause Button
-const btnStartPause = document.getElementById("btnStartPause");
-// Reset Button
-const btnReset = document.getElementById("btnReset");
-
-//Variables for the timer - now needed globally
-let hasStartedLoop = false; //needed  for initial deployment
-let intervalId = null;
-let remainingTime = 0;
-
-let shouldStop = false; // Needed for reset button. tells the loop to stop
+wavesurfer.load(model.tracklist[0].filepath);
 
 //Initalise text fields - will connect to variables when done testing
 clockField.textContent = "00:00";
@@ -74,28 +62,28 @@ modeField.textContent = "";
 const modeTheme = function (mode) {
   switch (model.state.mode) {
     case "working":
-      screenStatus = "working";
-      body.style.backgroundColor = "#4bb3fd";
-      paused = false;
+      model.state.screenStatus = "working";
+      view.updateBackground("working");
+      model.state.paused = false;
       break;
     case "resting":
-      screenStatus = "resting";
-      body.style.backgroundColor = "#c2aff0";
-      paused = false;
+      model.state.screenStatus = "resting";
+      view.updateBackground("resting");
+      model.state.paused = false;
+
       break;
     case "transition":
-      screenStatus = "transition";
-      body.style.backgroundColor = "#e2b6cf";
-      paused = false;
+      model.state.screenStatus = "transition";
+      view.updateBackground("transition");
+      model.state.paused = false;
       break;
     default:
-      screenStatus = "paused";
-      body.style.backgroundColor = "#b0c4b1";
-      paused = true;
+      model.state.screenStatus = "paused";
+      view.updateBackground("paused");
+      model.state.paused = true;
   }
 
   // BEGIN TIMER
-  console.log(mode);
   console.log(model.state.mode);
   console.log(`${model.state.mode} theme`);
   //WHEN TIMER = 0 , flip the other timer on
@@ -105,14 +93,12 @@ const modeTheme = function (mode) {
 //Start Timer Function
 function startCountdown(timeLimit, mode) {
   return new Promise((resolve) => {
-    // let hasStarted = false;
-
     // Convert the time limit (in minutes) to milliseconds
-    remainingTime = timeLimit * 60 * 1000;
+    model.state.remainingTime = timeLimit * 60 * 1000;
 
     // Clear the old interval if exists, otherwise ghosts appear
-    if (intervalId) {
-      clearInterval(intervalId);
+    if (model.state.intervalId) {
+      clearInterval(model.state.intervalId);
     }
 
     // Set up an interval to update the countdown every second
@@ -120,82 +106,61 @@ function startCountdown(timeLimit, mode) {
     // We can then return back the remaining Time to show on screen
 
     modeTheme(model.state.mode);
-    prePausedMode = screenStatus; // This is to resume following a pause
+    model.state.prePausedMode = model.state.screenStatus; // This is to resume following a pause
+    view.updateDisplay(model.state.remainingTime, model.state.screenStatus);
 
-    updateDisplay();
-
-    intervalId = setInterval(() => {
+    model.state.intervalId = setInterval(() => {
       // If Paused = true.. pause!
-      if (paused) {
+      if (model.state.paused) {
         return;
       } else {
         // Decrease the remaining time by 1 second (1000 milliseconds)
-
-        remainingTime -= 1000;
+        model.state.remainingTime -= 1000;
       }
-      updateDisplay();
+      view.updateDisplay(model.state.remainingTime, model.state.screenStatus);
 
       // If the countdown reaches zero, stop the timer
-      if (remainingTime <= -1) {
+      if (model.state.remainingTime <= -1) {
         //temp, this will change to toggle, (if work, then rest, vice versa)
         clockField.textContent = "00:00";
         //modeField.textContent = "";
-        clearInterval(intervalId); // Clear the interval
+        clearInterval(model.state.intervalId); // Clear the interval
 
         //BUG: This starts a second early..
         //modeTransition(screenStatus);
         resolve();
       }
     }, 1000);
-
-    function updateDisplay() {
-      //moving these to a function has fixed the mode change before timer start bug
-
-      // Calculate the remaining minutes and seconds
-      // Math.floor returns integers, always rounds down.
-      let minutes = Math.floor(remainingTime / 60000); // 1 minute = 60,000 milliseconds
-      let seconds = Math.floor((remainingTime % 60000) / 1000); // Get the remaining seconds
-
-      // Display the remaining time in MM:SS format
-      modeField.textContent = `${screenStatus.toUpperCase()}`;
-      clockField.textContent = `   ${minutes}:${
-        seconds < 10 ? "0" + seconds : seconds
-      }`;
-
-      // Update the countdown every second (1000 milliseconds)
-    }
   });
 }
 
 //Loop Function
 async function loopTimers() {
-  shouldStop = false; // Clear stop flag when starting fresh
+  model.state.shouldStop = false; // Clear stop flag when starting fresh
 
-  while (!shouldStop) {
+  while (!model.state.shouldStop) {
     modeTheme("working");
     await startCountdown(model.state.workTime, "working");
-    if (shouldStop) break;
+    if (model.state.shouldStop) break;
     modeTheme("transition");
     await startCountdown(model.state.transTime, "transition");
-    if (shouldStop) break;
+    if (model.state.shouldStop) break;
     modeTheme("resting");
     await startCountdown(model.state.restTime, "resting");
-    if (shouldStop) break;
+    if (model.state.shouldStop) break;
     modeTheme("transition");
     await startCountdown(model.state.transTime, "transition");
-    if (shouldStop) break;
+    if (model.state.shouldStop) break;
   }
 }
 
 //Pause Button Functionality
-btnStartPause.addEventListener("click", async function () {
-  //console.log("button click has changed to", paused);
-
-  if (!hasStartedLoop) {
+view.btnStartPause.addEventListener("click", async function () {
+  if (!model.state.hasStartedLoop) {
     //startCountdown(workTime, "working"); // Countdown timer for 5 minutes
-    hasStartedLoop = true; // for it has, begun!
-    paused = false;
-    screenStatus = "working";
+    model.state.hasStartedLoop = true; // for it has, begun!
+    model.state.paused = false;
+    model.state.screenStatus = "working";
     wavesurfer.play();
     btnStartPause.textContent = "Pause";
     btnReset.textContent = "Reset";
@@ -203,48 +168,40 @@ btnStartPause.addEventListener("click", async function () {
     return;
   }
 
-  if (!paused) {
-    prePausedMode = screenStatus;
-    console.log("prePausedMode: ", prePausedMode);
-    paused = true;
+  if (!model.state.paused) {
+    model.state.prePausedMode = model.state.screenStatus;
+    console.log("prePausedMode: ", model.state.prePausedMode);
+    model.state.paused = true;
     wavesurfer.pause();
     console.log("Now pausing");
-    btnStartPause.textContent = "Resume";
+    view.btnStartPause.textContent = "Resume";
     modeTheme("paused");
     return;
   } else {
-    paused = false;
+    model.state.paused = false;
     console.log("should be unpausing");
     wavesurfer.play();
-    btnStartPause.textContent = "Pause";
-    modeTheme(prePausedMode);
+    view.btnStartPause.textContent = "Pause";
+    modeTheme(model.state.prePausedMode);
+    //debug
+    if (!model.state.prePausedMode)
+      console.error(` no PrePausedMode being passed!`);
     return;
   }
 });
 
-btnReset.addEventListener("click", function () {
+view.btnReset.addEventListener("click", function () {
   console.log(`Resetting`);
 
-  shouldStop = true; // Stop the loopTimer
-  if (intervalId) clearInterval(intervalId); // Stop CountdownTimer.. why did I named it intervalId?
-  intervalId = null;
+  model.state.shouldStop = true; // Stop the loopTimer
+  if (model.state.intervalId) clearInterval(model.state.intervalId); // Stop CountdownTimer.. why did I named it intervalId?
+  model.state.intervalId = null;
 
-  paused = false;
-  hasStartedLoop = false;
-  remainingTime = 0;
+  model.state.paused = false;
+  model.state.hasStartedLoop = false;
+  model.state.remainingTime = 0;
 
-  clockField.textContent = "00:00";
-  modeField.textContent = ">_<";
-  body.style.backgroundColor = "#b0c4b1";
-  btnStartPause.textContent = "Start";
-  btnReset.textContent = "  .  ";
+  view.resetDisplay();
+  view.btnStartPause.textContent = "Start";
+  view.btnReset.textContent = "  .  ";
 });
-
-const wavesurfer = WaveSurfer.create({
-  container: "#waveform",
-  waveColor: "violet",
-  progressColor: "purple",
-  backend: "MediaElement",
-});
-
-wavesurfer.load(model.tracklist[0].filepath);
