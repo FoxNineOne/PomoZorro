@@ -40,11 +40,13 @@ function convertToMilliseconds(minutes) {
 }
 */
 "use strict";
+import * as config from "./config.js";
+import * as model from "./model.js";
 
 const body = document.body;
 
 let currentTime = new Date().getTime(); // Milliseconds since Unix epoch
-let screenStatus = "Paused";
+let screenStatus = "paused";
 let paused = false;
 let prePausedMode;
 let timerArea = document.getElementById("countdowntimer");
@@ -56,7 +58,7 @@ const btnStartPause = document.getElementById("btnStartPause");
 // Reset Button
 const btnReset = document.getElementById("btnReset");
 
-//Vairables for the timer - now needed globally
+//Variables for the timer - now needed globally
 let hasStartedLoop = false; //needed  for initial deployment
 let intervalId = null;
 let remainingTime = 0;
@@ -67,15 +69,10 @@ let shouldStop = false; // Needed for reset button. tells the loop to stop
 clockField.textContent = "00:00";
 modeField.textContent = "";
 
-//custom times that hopefully I'll retrieve from end user
-let workTime = 0.1; // This will be set on the page
-let restTime = 0.1; // This  will also be set on the page
-let transTime = 0.05;
-
 //Functions
 // This function will develop further, switching screen style, possibly audio volume, and playlist?
 const modeTheme = function (mode) {
-  switch (mode) {
+  switch (model.state.mode) {
     case "working":
       screenStatus = "working";
       body.style.backgroundColor = "#4bb3fd";
@@ -98,7 +95,9 @@ const modeTheme = function (mode) {
   }
 
   // BEGIN TIMER
-  console.log(`${mode} theme`);
+  console.log(mode);
+  console.log(model.state.mode);
+  console.log(`${model.state.mode} theme`);
   //WHEN TIMER = 0 , flip the other timer on
   // startTimer( mode === "work" ? "rest" : "work")
 };
@@ -120,7 +119,7 @@ function startCountdown(timeLimit, mode) {
     // The setInterval() function runs a function every 1 second
     // We can then return back the remaining Time to show on screen
 
-    modeTheme(mode);
+    modeTheme(model.state.mode);
     prePausedMode = screenStatus; // This is to resume following a pause
 
     updateDisplay();
@@ -174,16 +173,16 @@ async function loopTimers() {
 
   while (!shouldStop) {
     modeTheme("working");
-    await startCountdown(workTime, "working");
+    await startCountdown(model.state.workTime, "working");
     if (shouldStop) break;
     modeTheme("transition");
-    await startCountdown(transTime, "transition");
+    await startCountdown(model.state.transTime, "transition");
     if (shouldStop) break;
     modeTheme("resting");
-    await startCountdown(restTime, "resting");
+    await startCountdown(model.state.restTime, "resting");
     if (shouldStop) break;
     modeTheme("transition");
-    await startCountdown(transTime, "transition");
+    await startCountdown(model.state.transTime, "transition");
     if (shouldStop) break;
   }
 }
@@ -196,6 +195,7 @@ btnStartPause.addEventListener("click", async function () {
     //startCountdown(workTime, "working"); // Countdown timer for 5 minutes
     hasStartedLoop = true; // for it has, begun!
     paused = false;
+    screenStatus = "working";
     wavesurfer.play();
     btnStartPause.textContent = "Pause";
     btnReset.textContent = "Reset";
@@ -205,16 +205,20 @@ btnStartPause.addEventListener("click", async function () {
 
   if (!paused) {
     prePausedMode = screenStatus;
-    // console.log("prePausedMode: ", prePausedMode);
+    console.log("prePausedMode: ", prePausedMode);
     paused = true;
     wavesurfer.pause();
+    console.log("Now pausing");
     btnStartPause.textContent = "Resume";
     modeTheme("paused");
+    return;
   } else {
     paused = false;
+    console.log("should be unpausing");
     wavesurfer.play();
     btnStartPause.textContent = "Pause";
     modeTheme(prePausedMode);
+    return;
   }
 });
 
@@ -243,4 +247,4 @@ const wavesurfer = WaveSurfer.create({
   backend: "MediaElement",
 });
 
-wavesurfer.load("/tracks/ZorroSonburu.mp3");
+wavesurfer.load(model.tracklist[0].filepath);
