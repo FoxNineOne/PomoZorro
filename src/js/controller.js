@@ -59,8 +59,8 @@ modeField.textContent = "";
 
 //Functions
 // This function will develop further, switching screen style, possibly audio volume, and playlist?
-const modeTheme = function (mode) {
-  switch (model.state.mode) {
+const modeTheme = function (modeTheme) {
+  switch (modeTheme) {
     case "working":
       model.state.screenStatus = "working";
       view.updateBackground("working");
@@ -77,14 +77,14 @@ const modeTheme = function (mode) {
       view.updateBackground("transition");
       model.state.paused = false;
       break;
-    default:
+    case "paused":
       model.state.screenStatus = "paused";
       view.updateBackground("paused");
       model.state.paused = true;
   }
 
   // BEGIN TIMER
-  console.log(model.state.mode);
+  console.log("paused", model.state.paused);
   console.log(`${model.state.mode} theme`);
   //WHEN TIMER = 0 , flip the other timer on
   // startTimer( mode === "work" ? "rest" : "work")
@@ -159,23 +159,24 @@ view.btnStartPause.addEventListener("click", async function () {
   if (!model.state.hasStartedLoop) {
     //startCountdown(workTime, "working"); // Countdown timer for 5 minutes
     model.state.hasStartedLoop = true; // for it has, begun!
-    model.state.paused = false;
-    model.state.screenStatus = "working";
+    model.state.mode = "working";
+    modeTheme(model.state.mode);
     wavesurfer.play();
-    btnStartPause.textContent = "Pause";
-    btnReset.textContent = "Reset";
+    view.btnStartPause.textContent = "Pause";
+    view.btnReset.textContent = "Reset";
     loopTimers(); //Call the loop function
     return;
   }
 
   if (!model.state.paused) {
     model.state.prePausedMode = model.state.screenStatus;
-    console.log("prePausedMode: ", model.state.prePausedMode);
     model.state.paused = true;
     wavesurfer.pause();
-    console.log("Now pausing");
+    console.log(model.state);
     view.btnStartPause.textContent = "Resume";
-    modeTheme("paused");
+    console.log(model.state);
+    modeTheme();
+    console.log(model.state);
     return;
   } else {
     model.state.paused = false;
