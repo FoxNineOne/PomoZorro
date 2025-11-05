@@ -18,15 +18,16 @@ Simplifies writing timer code twice.
 X need a function to start decreasing until reaches 0 
 
 + Create text values that show work limit, and relax limit, and have them updates back to variable
-+ Get Start button to execute function
-+ Implement a Pause mode
-+ Pause mode kicks in from button
-+ Reset mode  - sets status to Working, awaiting start button
+X Get Start button to execute function
+X Implement a Pause mode
+X Pause mode kicks in from button
+X Reset mode  - sets status to Working, awaiting start button
   - BONUS have a checkbox to not reset custom times for work/relax
 
-+ Have webpage background change colour dependant on mode
-+ implement a music player.. that volumes is louder for work, quieter for relax or vice versa
-  +  look at playlisting multiple audio
+X Have webpage background change colour dependant on mode
+X implement a music player.. 
+  + that volumes is louder for work, quieter for relax or vice versa
+  + look at playlisting multiple audio
   + retrieve playlist onto screen. enable, disable ,re order songs
 + over arching pause /plau audio buttons on sitepage
     
@@ -39,6 +40,7 @@ function convertToMilliseconds(minutes) {
   return minutes * 60 * 1000; // Convert minutes to milliseconds
 }
 */
+
 "use strict";
 import * as config from "./config.js";
 import * as model from "./model.js";
@@ -51,43 +53,37 @@ const wavesurfer = WaveSurfer.create({
   backend: "MediaElement",
 });
 
-wavesurfer.load(model.tracklist[0].filepath);
+// Music stuff
+wavesurfer.load(model.tracklist[3].filepath);
+const playlist = model.tracklist.filter((track) => track.enabled === true);
+const playlistPath = playlist.map((track) => track.filepath);
 
-//Initalise text fields - will connect to variables when done testing
-clockField.textContent = "00:00";
-modeField.textContent = "";
-
+const init = function () {
+  //Initalise text fields - will connect to variables when done testing
+  clockField.textContent = "00:00";
+  modeField.textContent = "";
+};
 //Functions
 // This function will develop further, switching screen style, possibly audio volume, and playlist?
 const modeTheme = function (modeTheme) {
-  switch (modeTheme) {
-    case "working":
-      model.state.screenStatus = "working";
-      view.updateBackground("working");
-      model.state.paused = false;
-      break;
-    case "resting":
-      model.state.screenStatus = "resting";
-      view.updateBackground("resting");
-      model.state.paused = false;
+  model.state.mode = modeTheme;
 
-      break;
-    case "transition":
-      model.state.screenStatus = "transition";
-      view.updateBackground("transition");
-      model.state.paused = false;
-      break;
-    case "paused":
-      model.state.screenStatus = "paused";
-      view.updateBackground("paused");
-      model.state.paused = true;
+  if (model.state.mode === "paused") {
+    wavesurfer.pause();
+    model.state.paused = true;
+    model.state.prePausedMode = model.state.screenStatus;
+    // model.state.screenStatus = "paused";
+    //view.updateBackground("paused");
+  } else {
+    model.state.paused = false;
+    model.state.prePausedMode = null;
+    view.btnStartPause.textContent = "Pause";
+    wavesurfer.play();
   }
 
-  // BEGIN TIMER
-  console.log("paused", model.state.paused);
-  console.log(`${model.state.mode} theme`);
-  //WHEN TIMER = 0 , flip the other timer on
-  // startTimer( mode === "work" ? "rest" : "work")
+  view.updateBackground(model.state.mode);
+  model.state.screenStatus = model.state.mode;
+  view.updateDisplay(model.state.remainingTime, model.state.screenStatus);
 };
 
 //Start Timer Function
@@ -156,38 +152,18 @@ async function loopTimers() {
 
 //Pause Button Functionality
 view.btnStartPause.addEventListener("click", async function () {
-  if (!model.state.hasStartedLoop) {
-    //startCountdown(workTime, "working"); // Countdown timer for 5 minutes
-    model.state.hasStartedLoop = true; // for it has, begun!
-    model.state.mode = "working";
-    modeTheme(model.state.mode);
-    wavesurfer.play();
-    view.btnStartPause.textContent = "Pause";
-    view.btnReset.textContent = "Reset";
+  if (!model.state.isRunning) {
+    model.state.isRunning = true; // for it has, begun!
+    modeTheme("working");
     loopTimers(); //Call the loop function
     return;
   }
 
   if (!model.state.paused) {
-    model.state.prePausedMode = model.state.screenStatus;
-    model.state.paused = true;
-    wavesurfer.pause();
-    console.log(model.state);
-    view.btnStartPause.textContent = "Resume";
-    console.log(model.state);
-    modeTheme();
-    console.log(model.state);
-    return;
+    modeTheme("paused");
   } else {
-    model.state.paused = false;
-    console.log("should be unpausing");
-    wavesurfer.play();
-    view.btnStartPause.textContent = "Pause";
-    modeTheme(model.state.prePausedMode);
-    //debug
-    if (!model.state.prePausedMode)
-      console.error(` no PrePausedMode being passed!`);
-    return;
+    // Resume Music (Short circuiting! if no PrePaused mode, assume return to "working")
+    modeTheme(model.state.prePausedMode || "working");
   }
 });
 
@@ -197,12 +173,14 @@ view.btnReset.addEventListener("click", function () {
   model.state.shouldStop = true; // Stop the loopTimer
   if (model.state.intervalId) clearInterval(model.state.intervalId); // Stop CountdownTimer.. why did I named it intervalId?
   model.state.intervalId = null;
-
   model.state.paused = false;
-  model.state.hasStartedLoop = false;
+  model.state.isRunning = false;
   model.state.remainingTime = 0;
 
   view.resetDisplay();
-  view.btnStartPause.textContent = "Start";
-  view.btnReset.textContent = "  .  ";
+  view.btnStartPause.textContent = `▶️`;
+  view.btnReset.textContent = `⏹️`;
+  wavesurfer.stop();
 });
+
+init();

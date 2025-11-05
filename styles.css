@@ -48,7 +48,7 @@ body {
   color: white;
   display: inline;
   text-align: center;
-  background: url("img/whiteCircle.png"), red;
+  background: url("/src/img/whiteCircle.png"), red;
   background-size: cover; /* Ensures the image covers the element */
   background-repeat: no-repeat; /* Prevents the image from repeating */
   background-position: center; /* Centers the image */

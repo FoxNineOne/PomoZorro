@@ -1,5 +1,4 @@
 "use strict";
-
 import * as model from "./model.js";
 
 const body = document.body;
@@ -33,10 +32,16 @@ export function updateBackground(mode) {
     paused: "#b0c4b1",
   };
   body.style.backgroundColor = colours[mode] || "#b0c4b1";
+  if (mode === "paused") {
+    btnStartPause.textContent = `▶️`;
+  } else {
+    btnStartPause.textContent = `⏸️`;
+    btnReset.textContent = `⏹️`;
+  }
 }
 
 export function resetDisplay() {
   clockField.textContent = "00:00";
   modeField.textContent = ">_<";
-  view.updateBackground("paused");
+  updateBackground("paused");
 }
