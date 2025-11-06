@@ -54,14 +54,46 @@ const wavesurfer = WaveSurfer.create({
 });
 
 // Music stuff
-wavesurfer.load(model.tracklist[3].filepath);
+//wavesurfer.load(model.tracklist[3].filepath);
 const playlist = model.tracklist.filter((track) => track.enabled === true);
-const playlistPath = playlist.map((track) => track.filepath);
+console.log(playlist.length);
+//const playlistPath = playlist.map((track) => track.filepath);
+
+async function loadTrack(index = model.state.currTrackIndex) {
+  const track = playlist[index];
+  if (!track) return;
+  await wavesurfer.load(track.filepath);
+  view.nowPlaying.textContent = `Playing ${track.songName} by ${track.artist}`;
+  if (!model.state.paused) {
+    wavesurfer.play();
+    console.log(model.state.paused);
+  }
+}
+
+function changeTrack(direction = 1) {
+  // 1 will skip  -1 for previous
+  let newIndex = direction + model.state.currTrackIndex;
+
+  // if result is less than 0 (start of playlist), go to end of playlist
+  if (newIndex < 0) {
+    wavesurfer.waveColor = "red";
+    newIndex = playlist.length - 1;
+  } // if reach end of playlist, go to start
+  else if (newIndex >= playlist.length) {
+    wavesurfer.waveColor = "green";
+    newIndex = 0;
+  }
+  //  success
+  wavesurfer.waveColor = "blue";
+  model.state.currTrackIndex = newIndex;
+  loadTrack();
+}
 
 const init = function () {
   //Initalise text fields - will connect to variables when done testing
   clockField.textContent = "00:00";
   modeField.textContent = "";
+  loadTrack(model.state.currTrackIndex);
 };
 //Functions
 // This function will develop further, switching screen style, possibly audio volume, and playlist?
@@ -78,6 +110,9 @@ const modeTheme = function (modeTheme) {
     model.state.paused = false;
     model.state.prePausedMode = null;
     view.btnStartPause.textContent = "Pause";
+    wavesurfer.play();
+    wavesurfer.play();
+    wavesurfer.play();
     wavesurfer.play();
   }
 
@@ -183,4 +218,10 @@ view.btnReset.addEventListener("click", function () {
   wavesurfer.stop();
 });
 
+view.btnNext.addEventListener("click", function () {
+  changeTrack(1);
+});
+view.btnPrev.addEventListener("click", function () {
+  changeTrack(-1);
+});
 init();

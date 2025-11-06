@@ -9,6 +9,12 @@ let modeField = document.getElementById("modeField");
 // On Screen Buttons
 export const btnStartPause = document.getElementById("btnStartPause");
 export const btnReset = document.getElementById("btnReset");
+export const btnNext = document.getElementById("btnNext");
+export const btnPrev = document.getElementById("btnPrev");
+
+export const btnSongSkip = document.getElementsByClassName(".songskip");
+
+export const nowPlaying = document.getElementById("nowPlaying");
 
 export function updateDisplay() {
   // Calculate the remaining minutes and seconds

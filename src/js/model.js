@@ -13,6 +13,8 @@ export const state = {
   currentTime: new Date().getTime(),
   screenStatus: "paused",
   mode: "working",
+
+  currTrackIndex: 0,
 };
 
 export const tracklist = [
