@@ -54,10 +54,22 @@ const wavesurfer = WaveSurfer.create({
 });
 
 // Music stuff
-//wavesurfer.load(model.tracklist[3].filepath);
-const playlist = model.tracklist.filter((track) => track.enabled === true);
-console.log(playlist.length);
-//const playlistPath = playlist.map((track) => track.filepath);
+
+let playlist = [];
+
+const renderPlaylist = function (playlist) {
+  const container = document.getElementById("playlistContainer");
+  container.innerHTML = "";
+
+  playlist.forEach((track, index) => {
+    const row = document.createElement("div");
+    row.classList.add("playlist-item");
+    row.draggable = true;
+    row.dataset.index = index;
+    row.textContent = `${index + 1} ${track.songName}`;
+    container.appendChild(row);
+  });
+};
 
 async function loadTrack(index = model.state.currTrackIndex) {
   const track = playlist[index];
@@ -66,9 +78,18 @@ async function loadTrack(index = model.state.currTrackIndex) {
   view.nowPlaying.textContent = `Playing ${track.songName} by ${track.artist}`;
   if (!model.state.paused) {
     wavesurfer.play();
-    console.log(model.state.paused);
   }
 }
+
+wavesurfer.on("finish", async function () {
+  if (model.state.currTrackIndex < playlist.length - 1) {
+    model.state.currTrackIndex++;
+  } else {
+    model.state.currTrackIndex = 0;
+  }
+  await loadTrack(model.state.currTrackIndex);
+  wavesurfer.play();
+});
 
 function changeTrack(direction = 1) {
   // 1 will skip  -1 for previous
@@ -89,12 +110,6 @@ function changeTrack(direction = 1) {
   loadTrack();
 }
 
-const init = function () {
-  //Initalise text fields - will connect to variables when done testing
-  clockField.textContent = "00:00";
-  modeField.textContent = "";
-  loadTrack(model.state.currTrackIndex);
-};
 //Functions
 // This function will develop further, switching screen style, possibly audio volume, and playlist?
 const modeTheme = function (modeTheme) {
@@ -224,4 +239,15 @@ view.btnNext.addEventListener("click", function () {
 view.btnPrev.addEventListener("click", function () {
   changeTrack(-1);
 });
+
+const init = function () {
+  playlist = model.tracklist.filter((track) => track.enabled === true);
+  renderPlaylist(playlist);
+
+  //Initalise text fields - will connect to variables when done testing
+  clockField.textContent = "00:00";
+  modeField.textContent = "";
+  loadTrack(model.state.currTrackIndex);
+};
+
 init();
