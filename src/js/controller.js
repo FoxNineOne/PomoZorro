@@ -1,42 +1,4 @@
 /*
-The idea is.. you set the values on the page  to how long you wish to work, and how long to rest. 
-So default, you'd work for 25 minutes, and rest for 5.
-
-Need a function to begin a timer. 
-From GO.. a timer will count down of how much time left to work (pulled from the workTime values).
-The background changes blue , a sound fx plays (like a soft alarm)
-Once this reaches 0, the background changes to green.
-a new time will count down, from the restTime values
-once this reaches 0, a soft alarm fx plays, and it repeats back to workTimer
-
-
-Build a timer function 
-take variables of if it's work or rest (then we can determine timelimits for each and screen status)
-this can dictate which timer is shown on screen, and which values.
-Simplifies writing timer code twice.
-
-X need a function to start decreasing until reaches 0 
-
-X Create text values that show work limit, and relax limit, and have them updates back to variable
-X Get Start button to execute function
-X Implement a Pause mode
-X Pause mode kicks in from button
-X Reset mode  - sets status to Working, awaiting start button
-  - BONUS have a checkbox to not reset custom times for work/relax
-
-X Have webpage background change colour dependant on mode
-X implement a music player.. 
-  + that volumes is louder for work, quieter for relax or vice versa
-  + look at playlisting multiple audio
-  + retrieve playlist onto screen. enable, disable ,re order songs
-  + add skip to next mode functionality
-  + play a soft alarm chime when counter hits 0 to notify end user of timer
-
-    
-
-
-
-/*
 // Function to convert received timeLimit to milliseconds. MIGHT NOT NEED THIS
 function convertToMilliseconds(minutes) {
   return minutes * 60 * 1000; // Convert minutes to milliseconds
@@ -50,8 +12,8 @@ import * as view from "./view.js";
 
 const wavesurfer = WaveSurfer.create({
   container: "#waveform",
-  waveColor: "violet",
-  progressColor: "purple",
+  waveColor: "white",
+  progressColor: "gray",
   backend: "MediaElement",
 });
 
@@ -77,7 +39,7 @@ async function loadTrack(index = model.state.currTrackIndex) {
   const track = playlist[index];
   if (!track) return;
   await wavesurfer.load(track.filepath);
-  view.nowPlaying.textContent = `Playing ${track.songName} by ${track.artist}`;
+  view.nowPlaying.textContent = `${track.songName} by ${track.artist}`;
   if (!model.state.paused) {
     wavesurfer.play();
   }
@@ -269,7 +231,7 @@ const init = function () {
   playlist = model.tracklist.filter((track) => track.enabled === true);
   renderPlaylist(playlist);
   clockField.textContent = "00:00";
-  modeField.textContent = "";
+  modeField.textContent = "press play to begin";
   loadTrack(model.state.currTrackIndex);
 };
 

@@ -16,6 +16,8 @@ export const state = {
   mode: "working",
 
   currTrackIndex: 0,
+  isMuted: false,
+  volumeLevel: 100,
 };
 
 export const tracklist = [

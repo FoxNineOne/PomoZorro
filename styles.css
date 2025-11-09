@@ -1,16 +1,46 @@
 h1 {
+  text-align: left;
+  padding-left: 20;
+  color: white;
+  font-size: 40;
+}
+
+h2 {
   text-align: center;
-  color: 585481;
+  padding-left: 20;
+  color: white;
+  font-size: 36;
 }
 
 h3 {
+  text-align: left;
+  padding-left: 20;
+  color: gray;
+}
+
+h4 {
   text-align: center;
-  color: 585481;
+  padding-left: 20;
+  font-size: 40;
+  color: rgb(99, 99, 99);
 }
 
 body {
   --background-color: #b0c4b1;
-  background-image: linear-gradient(to top, #a3ddebff, #a7f5abff);
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(187, 237, 189),
+    rgba(210, 247, 212, 1),
+    #a3ddebff,
+    rgb(187, 237, 189)
+  );
+}
+
+#nowPlaying {
+  text-align: center;
+  padding-left: 20;
+  color: white;
+  font-size: 36;
 }
 
 #clockField {
@@ -25,13 +55,32 @@ body {
   display: block;
 }
 
+.input--Number {
+  background-color: #42424200;
+  font-weight: regular;
+  font-size: 200%;
+  text-align: left;
+  color: rgb(255, 255, 255);
+  display: block;
+  border-color: #00000000;
+}
+.inputCaption {
+  background-color: #42424200;
+  font-weight: regular;
+  font-size: 100%;
+  text-align: center;
+  color: rgb(116, 115, 115);
+  display: block;
+  border-color: #00000000;
+}
 .btn--text {
   text-align: center;
   color: white;
-  background-color: 585481; /* Can always look into making this darker or change when pause button is activated.. but the pause button will be redundant later on */
+  background-color: #95959559; /* Can always look into making this darker or change when pause button is activated.. but the pause button will be redundant later on */
   font-weight: bold;
   display: inline-block;
   font-size: 250%;
+  border-width: 0cap;
 }
 
 .btn--container {

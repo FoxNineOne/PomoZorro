@@ -32,17 +32,33 @@
   </div>
   <br />
   <div id="timeSettings" align="center">
-    <input type="number" id="workTime" value="25" min="1" max="60" step="1" />
+    <input
+      type="number"
+      id="workTime"
+      class="input--Number workTime"
+      value="25"
+      min="1"
+      max="60"
+      step="1"
+    />
+
+    <p class="inputCaption">work</p>
+    <input
+      type="number"
+      id="restTime"
+      class="input--Number restTime"
+      value="5"
+      min="1"
+      max="60"
+      step="1"
+    />
+    <p class="inputCaption">rest</p>
     <br />
-    work <br />
-    <input type="number" id="restTime" value="5" min="1" max="60" step="1" />
-    <br />
-    rest <br />
 
     <div id="waveform"></div>
     <h2>now playing</h2>
     <div id="nowPlaying"></div>
-    <h3>playlist</h3>
+    <h4>playlist</h4>
     <div id="playlistContainer" class="playlist"></div>
 
     <!--  Need to find out if these fields can dynamically update the logic in js, or will I need a button to submit new values to js variables  -->

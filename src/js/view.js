@@ -34,10 +34,14 @@ export function updateDisplay() {
 export function updateBackground(mode) {
   const colours = {
     //working: "#4bb3fd",
-    working: `linear-gradient(to top, white, #4bb3fd)`,
-    resting: `linear-gradient(to top, white, #c2aff0)`,
+    working: `linear-gradient(to bottom right, #ffe063ff, #f5d29eac, #ffe063 ,#f5d29eac)`,
+    resting: `linear-gradient(to bottom left,  #c2aff0, #c2aff0, white, #c2aff0)`,
     transition: `linear-gradient(to top, white, #e2b6cf)`,
-    paused: `linear-gradient(to top, #a3ddebff , #a7f5abff)`,
+    paused: `linear-gradient( to bottom right,
+    rgb(187, 237, 189),
+    rgba(210, 247, 212, 1),
+    #a3ddebff,
+    rgb(187, 237, 189))`,
   };
   body.style.backgroundImage =
     colours[mode] || `linear-gradient(to top, #a3ddebff , #a7f5abff)`;
