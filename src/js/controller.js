@@ -17,7 +17,7 @@ Simplifies writing timer code twice.
 
 X need a function to start decreasing until reaches 0 
 
-+ Create text values that show work limit, and relax limit, and have them updates back to variable
+X Create text values that show work limit, and relax limit, and have them updates back to variable
 X Get Start button to execute function
 X Implement a Pause mode
 X Pause mode kicks in from button
@@ -29,10 +29,12 @@ X implement a music player..
   + that volumes is louder for work, quieter for relax or vice versa
   + look at playlisting multiple audio
   + retrieve playlist onto screen. enable, disable ,re order songs
-+ over arching pause /plau audio buttons on sitepage
+  + add skip to next mode functionality
+  + play a soft alarm chime when counter hits 0 to notify end user of timer
+
     
 
-// background goes from blue to red
+
 
 /*
 // Function to convert received timeLimit to milliseconds. MIGHT NOT NEED THIS
@@ -266,8 +268,6 @@ view.restTime.addEventListener("change", function (e) {
 const init = function () {
   playlist = model.tracklist.filter((track) => track.enabled === true);
   renderPlaylist(playlist);
-
-  //Initalise text fields - will connect to variables when done testing
   clockField.textContent = "00:00";
   modeField.textContent = "";
   loadTrack(model.state.currTrackIndex);

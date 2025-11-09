@@ -12,8 +12,8 @@ export const btnPlayPause = document.getElementById("btnStartPause");
 export const btnReset = document.getElementById("btnReset");
 export const btnNext = document.getElementById("btnNext");
 export const btnPrev = document.getElementById("btnPrev");
-
 export const btnSongSkip = document.getElementsByClassName(".songskip");
+export const btnSkipMode = document.getElementById("SkipMode");
 
 export const nowPlaying = document.getElementById("nowPlaying");
 
@@ -33,12 +33,14 @@ export function updateDisplay() {
 
 export function updateBackground(mode) {
   const colours = {
-    working: "#4bb3fd",
-    resting: "#c2aff0",
-    transition: "#e2b6cf",
-    paused: "#b0c4b1",
+    //working: "#4bb3fd",
+    working: `linear-gradient(to top, white, #4bb3fd)`,
+    resting: `linear-gradient(to top, white, #c2aff0)`,
+    transition: `linear-gradient(to top, white, #e2b6cf)`,
+    paused: `linear-gradient(to top, #a3ddebff , #a7f5abff)`,
   };
-  body.style.backgroundColor = colours[mode] || "#b0c4b1";
+  body.style.backgroundImage =
+    colours[mode] || `linear-gradient(to top, #a3ddebff , #a7f5abff)`;
   if (mode === "paused") {
     btnStartPause.textContent = `▶️`;
   } else {

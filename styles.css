@@ -9,7 +9,8 @@ h3 {
 }
 
 body {
-  background-color: b0c4b1;
+  --background-color: #b0c4b1;
+  background-image: linear-gradient(to top, #a3ddebff, #a7f5abff);
 }
 
 #clockField {
@@ -38,7 +39,9 @@ body {
 }
 
 .workingTheme {
-  background-color: lightgreen;
+  --background-color: lightgreen;
+  background-image: linear-gradient(to top left, #39b385, #9be15d);
+
   color: white;
   --gradient-primary: linear-gradient(to top left, #39b385, #9be15d);
   --gradient-secondary: linear-gradient(to top left, #ffb003, #ffcb03);
