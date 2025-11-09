@@ -1,6 +1,8 @@
 # PomoZorro
 A (Work in Progress) Pomodoro timer - with Zorro Sombre music
 
+Current Status can be viewed here: https://pomozorro.netlify.app/
+
 The timer allows you two select your own duration of work and resting timess. 
 A playlist of Zorro Sombre music plays whilst the timer progresses.
 
