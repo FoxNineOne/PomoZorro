@@ -1,8 +1,9 @@
 export const state = {
   //custom times that hopefully I'll retrieve from end user
-  workTime: 1, // This will be set on the page
-  restTime: 0.5, // This  will also be set on the page
+  workTime: 25, // This will be set on the page
+  restTime: 5, // This  will also be set on the page
   transTime: 0.1, //transition period time
+  elapsedTime: 0,
   remainingTime: 0,
   paused: true,
   prePausedMode: null,

@@ -5,9 +5,10 @@ const body = document.body;
 let timerArea = document.getElementById("countdowntimer");
 let clockField = document.getElementById("clockField");
 let modeField = document.getElementById("modeField");
-
+export let workTime = document.getElementById("workTime");
+export let restTime = document.getElementById("restTime");
 // On Screen Buttons
-export const btnStartPause = document.getElementById("btnStartPause");
+export const btnPlayPause = document.getElementById("btnStartPause");
 export const btnReset = document.getElementById("btnReset");
 export const btnNext = document.getElementById("btnNext");
 export const btnPrev = document.getElementById("btnPrev");

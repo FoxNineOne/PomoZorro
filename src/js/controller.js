@@ -124,10 +124,10 @@ const modeTheme = function (modeTheme) {
   } else {
     model.state.paused = false;
     model.state.prePausedMode = null;
-    view.btnStartPause.textContent = "Pause";
-    wavesurfer.play();
-    wavesurfer.play();
-    wavesurfer.play();
+
+    //view.clockField.textContent = model.state.remainingTime;
+
+    view.btnPlayPause.textContent = "Pause";
     wavesurfer.play();
   }
 
@@ -162,15 +162,15 @@ function startCountdown(timeLimit, mode) {
       } else {
         // Decrease the remaining time by 1 second (1000 milliseconds)
         model.state.remainingTime -= 1000;
+        model.state.elapsedTime += 1000;
       }
       view.updateDisplay(model.state.remainingTime, model.state.screenStatus);
-
       // If the countdown reaches zero, stop the timer
       if (model.state.remainingTime <= -1) {
         //temp, this will change to toggle, (if work, then rest, vice versa)
         clockField.textContent = "00:00";
-        //modeField.textContent = "";
         clearInterval(model.state.intervalId); // Clear the interval
+        model.state.elapsedTime = 0;
 
         //BUG: This starts a second early..
         //modeTransition(screenStatus);
@@ -201,7 +201,7 @@ async function loopTimers() {
 }
 
 //Pause Button Functionality
-view.btnStartPause.addEventListener("click", async function () {
+view.btnPlayPause.addEventListener("click", async function () {
   if (!model.state.isRunning) {
     model.state.isRunning = true; // for it has, begun!
     modeTheme("working");
@@ -228,8 +228,9 @@ view.btnReset.addEventListener("click", function () {
   model.state.remainingTime = 0;
 
   view.resetDisplay();
-  view.btnStartPause.textContent = `▶️`;
+  view.btnPlayPause.textContent = `▶️`;
   view.btnReset.textContent = `⏹️`;
+  model.state.elapsedTime = 0;
   wavesurfer.stop();
 });
 
@@ -238,6 +239,28 @@ view.btnNext.addEventListener("click", function () {
 });
 view.btnPrev.addEventListener("click", function () {
   changeTrack(-1);
+});
+
+// !! there's a way I can possibly merge these two event listeners into one..
+// Look at JS course.. Pagination buttons did something similar.
+view.workTime.addEventListener("change", function (e) {
+  model.state.workTime = Number(e.target.value);
+  if (model.state.prePausedMode === "working") {
+    model.state.remainingTime =
+      model.state.workTime * 60 * 1000 - model.state.elapsedTime;
+  }
+  model.state.mode !== "paused" ? modeTheme("paused") : "";
+  view.updateDisplay(model.state.remainingTime, model.state.screenStatus);
+});
+
+view.restTime.addEventListener("change", function (e) {
+  model.state.restTime = Number(e.target.value);
+  if (model.state.prePausedMode === "resting") {
+    model.state.remainingTime =
+      model.state.restTime * 60 * 1000 - model.state.elapsedTime;
+  }
+  model.state.mode !== "paused" ? modeTheme("paused") : "";
+  view.updateDisplay(model.state.remainingTime, model.state.screenStatus);
 });
 
 const init = function () {
