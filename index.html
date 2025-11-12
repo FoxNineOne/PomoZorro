@@ -2,7 +2,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <link rel="shortcut icon" type="image/png" href="img/icon.png" />
+  <link rel="shortcut icon" type="image/png" href="src/img/icon.png" />
   <link rel="stylesheet" href="styles.css" />
   <title>PomoZorro⌚ | Pomodoro, but Zorro</title>
 </head>
@@ -20,30 +20,66 @@
     <span id="modeField"> Mode Field </span>
     <br />
     <div class="btn--container">
-      <button id="btnStartPause" class="btn--text">▶️</button>
-      <button id="btnReset" class="btn--text">⏹️</button>
-      <br />
-      <button id="btnPrev" class="btn--text songskip">⏮️</button>
-      <button id="btnNext" class="btn--text songskip">⏭️</button>
-      <br />
-      <button id="btnMute" class="btn--text">🔉</button>
-      <button id="btnSkipMode" class="btn--text">🛏️</button>
+      <button id="btnStartPause" class="btn--text">
+        <img src="src/img/btn_play.png" width="50" height="50" align="center" />
+      </button>
+      <button id="btnReset" class="btn--text">
+        <img src="src/img/btn_stop.png" width="50" height="50" align="center" />
+      </button>
+      <button id="btnPrev" class="btn--text songskip">
+        <img
+          src="src/img/btn_previous.png"
+          width="50"
+          height="50" 
+          align="center"
+        />
+      </button>
+      <button id="btnNext" class="btn--text songskip">
+        <img src="src/img/btn_skip.png" width="50" height="50" align="center" />
+      </button>
+      <br /><br />
+      <button id="btnMute" class="btn--text">
+        <img
+          src="src/img/btn_unmute.png"
+          width="50"
+          height="50"
+          class="btnMute"
+          align="center"
+        />
+      </button>
+      <button id="btnSkipMode" class="btn--text">
+        <img
+          src="src/img/btn_switchMode.png"
+          width="50"
+          height="50"
+          align="center"
+        />
+      </button>
     </div>
   </div>
   <br />
-  <div id="timeSettings" align="center">
-    <input
-      type="number"
-      id="workTime"
-      class="input--Number workTime"
-      value="25"
-      min="1"
-      max="60"
-      step="1"
-    />
+  <div id="timeSettings" align="center" >
+<table align="centre" >
 
-    <p class="inputCaption">work</p>
-    <input
+  <tbody >
+    <tr>
+      <td>
+        <input
+        type="number"
+        id="workTime"
+        class="input--Number workTime"
+        value="25"
+        min="1"
+        max="60"
+        step="1"
+      style="width:75;"
+        /></td>
+        <td><p class="inputCaption">work</p></td>
+        
+      </tr>
+
+        <tr>
+            <td> <input
       type="number"
       id="restTime"
       class="input--Number restTime"
@@ -51,18 +87,20 @@
       min="1"
       max="60"
       step="1"
-    />
-    <p class="inputCaption">rest</p>
-    <br />
+      style="width:70;"
+    /></td>
+            <td> <p class="inputCaption">rest</p></td>
+        </tr>
 
+    </tbody>  
+  </table>   
+    </div>
     <div id="waveform"></div>
     <h2>now playing</h2>
     <div id="nowPlaying"></div>
     <h4>playlist</h4>
     <div id="playlistContainer" class="playlist"></div>
-
     <!--  Need to find out if these fields can dynamically update the logic in js, or will I need a button to submit new values to js variables  -->
-
     <!-- Create button to hide/show time options -->
     <script src="https://unpkg.com/wavesurfer.js"></script>
     <script type="module" src="src/js/controller.js"></script>

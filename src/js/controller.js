@@ -83,15 +83,9 @@ const modeTheme = function (modeTheme) {
     wavesurfer.pause();
     model.state.paused = true;
     model.state.prePausedMode = model.state.screenStatus;
-    // model.state.screenStatus = "paused";
-    //view.updateBackground("paused");
   } else {
     model.state.paused = false;
     model.state.prePausedMode = null;
-
-    //view.clockField.textContent = model.state.remainingTime;
-
-    view.btnPlayPause.textContent = "Pause";
     wavesurfer.play();
   }
 
@@ -192,8 +186,11 @@ view.btnReset.addEventListener("click", function () {
   model.state.remainingTime = 0;
 
   view.resetDisplay();
-  view.btnPlayPause.textContent = `▶️`;
-  view.btnReset.textContent = `⏹️`;
+  view.btnPlayPause.innerHTML =
+    '<img src="src/img/btn_play.png" width="50" height="50" align="center" />';
+  view.btnReset.innerHTML =
+    '<img src="src/img/btn_stop.png" width="50" height="50" align="center" />';
+
   model.state.elapsedTime = 0;
   wavesurfer.stop();
 });
@@ -203,6 +200,29 @@ view.btnNext.addEventListener("click", function () {
 });
 view.btnPrev.addEventListener("click", function () {
   changeTrack(-1);
+});
+
+view.btnMute.addEventListener("click", function (e) {
+  // state.mute toggle | if muted , unmute, vice versa
+  model.state.isMuted = !model.state.isMuted;
+  model.state.isMuted ? wavesurfer.setMuted(true) : wavesurfer.setMuted(false);
+  (e.target.class = "btnMute" && model.state.isMuted)
+    ? (btnMute.innerHTML = `
+    <img
+          src="src/img/btn_mute.png"
+          width="50"
+          height="50"
+          align="center"
+          class="btnMute"
+        />`)
+    : (btnMute.innerHTML = `
+    <img
+          src="src/img/btn_unmute.png"
+          width="50"
+          height="50"
+          align="center"
+          class="btnMute"
+        />`);
 });
 
 // !! there's a way I can possibly merge these two event listeners into one..

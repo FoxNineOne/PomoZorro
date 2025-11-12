@@ -1,16 +1,15 @@
 # PomoZorro
+
 A (Work in Progress) Pomodoro timer - with Zorro Sombre music
 
 Current Status can be viewed here: https://pomozorro.netlify.app/
 
-The timer allows you two select your own duration of work and resting timess. 
+The timer allows you two select your own duration of work and resting timess.
 A playlist of Zorro Sombre music plays whilst the timer progresses.
 
+Currently , you can skip and repeat songs.
 
-Currently , you can skip and repeat songs. 
-
-Would like to implement playlist manipulation (change order of playlists, enable/diisable songs) , volumne control for work/rest mode.
-
+Would like to implement playlist manipulation (change order of playlists, enable/diisable songs) , volume control for work/rest mode, and have slow flahing of screen when on pause mode.
 
 This is a bit of design nightmare at the moment, this is not a priority for me until I've completed the functionality
 

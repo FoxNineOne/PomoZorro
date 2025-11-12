@@ -22,7 +22,7 @@ h4 {
   text-align: center;
   padding-left: 20;
   font-size: 40;
-  color: rgb(99, 99, 99);
+  color: rgb(255, 255, 255);
 }
 
 body {
@@ -36,47 +36,57 @@ body {
   );
 }
 
+.playlist-item {
+  text-align: center;
+  color: white;
+}
+
 #nowPlaying {
   text-align: center;
   padding-left: 20;
   color: white;
   font-size: 36;
+  opacity: 85%;
 }
 
 #clockField {
   font-weight: bold;
   font-size: 500%;
   display: block;
+  opacity: 85%;
 }
 
 #modeField {
   font-weight: bold;
   font-size: 400%;
   display: block;
+  opacity: 85%;
 }
 
 .input--Number {
   background-color: #42424200;
   font-weight: regular;
   font-size: 200%;
-  text-align: left;
+  text-align: right;
   color: rgb(255, 255, 255);
   display: block;
+  align-items: center;
   border-color: #00000000;
 }
 .inputCaption {
   background-color: #42424200;
   font-weight: regular;
-  font-size: 100%;
-  text-align: center;
-  color: rgb(116, 115, 115);
+  font-size: 120%;
+  text-align: left;
+  color: rgb(255, 255, 255);
   display: block;
   border-color: #00000000;
+  padding-right: 25;
 }
 .btn--text {
   text-align: center;
-  color: white;
-  background-color: #95959559; /* Can always look into making this darker or change when pause button is activated.. but the pause button will be redundant later on */
+  opacity: 85%;
+  background-color: transparent;
   font-weight: bold;
   display: inline-block;
   font-size: 250%;
@@ -100,7 +110,7 @@ body {
   color: white;
   display: inline;
   text-align: center;
-  background: url("/src/img/whiteCircle.png"), red;
+
   background-size: cover; /* Ensures the image covers the element */
   background-repeat: no-repeat; /* Prevents the image from repeating */
   background-position: center; /* Centers the image */

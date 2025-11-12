@@ -22,7 +22,7 @@ export const state = {
 
 export const tracklist = [
   {
-    songName: "Zorro Sonburu",
+    songName: "In'utsuna",
     artist: "Zorro Sombre",
     filepath: "/src/tracks/ZorroSonburu.mp3",
     enabled: true,
@@ -57,8 +57,4 @@ export const tracklist = [
     filepath: "/src/tracks/SoftSundaySoul.mp3",
     enabled: true,
   },
-  /**
-   *
-   *
-   */
 ];

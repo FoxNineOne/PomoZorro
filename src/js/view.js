@@ -14,6 +14,7 @@ export const btnNext = document.getElementById("btnNext");
 export const btnPrev = document.getElementById("btnPrev");
 export const btnSongSkip = document.getElementsByClassName(".songskip");
 export const btnSkipMode = document.getElementById("SkipMode");
+export const btnMute = document.getElementById("btnMute");
 
 export const nowPlaying = document.getElementById("nowPlaying");
 
@@ -46,10 +47,14 @@ export function updateBackground(mode) {
   body.style.backgroundImage =
     colours[mode] || `linear-gradient(to top, #a3ddebff , #a7f5abff)`;
   if (mode === "paused") {
-    btnStartPause.textContent = `▶️`;
+    btnStartPause.innerHTML =
+      '<img src="src/img/btn_play.png" width="50" height="50"  align="center"/>';
   } else {
-    btnStartPause.textContent = `⏸️`;
-    btnReset.textContent = `⏹️`;
+    btnStartPause.innerHTML =
+      '<img src="src/img/btn_pause.png" width="50"  height="50"  align="center" />';
+
+    btnReset.innerHTML =
+      '<img src="src/img/btn_stop.png" width="50" height="50"  align="center"/>';
   }
 }
 
@@ -58,3 +63,5 @@ export function resetDisplay() {
   modeField.textContent = ">_<";
   updateBackground("paused");
 }
+
+export function updateButton(button) {}
