@@ -1,10 +1,18 @@
 h1 {
   text-align: left;
   padding-left: 20;
+  padding-bottom: 0;
+  margin-bottom: 0;
   color: white;
   font-size: 40;
+  font-family: "Roboto", sans-serif;
 }
-
+a {
+  color: white;
+  text-decoration: none;
+  font-style: italic;
+  font-size: 20;
+}
 h2 {
   text-align: center;
   padding-left: 20;
@@ -15,6 +23,7 @@ h2 {
 h3 {
   text-align: left;
   padding-left: 20;
+  font-size: 16;
   color: gray;
 }
 
@@ -24,9 +33,12 @@ h4 {
   font-size: 40;
   color: rgb(255, 255, 255);
 }
-
+header {
+  font-family: "Inter", sans-serif;
+}
 body {
-  --background-color: #b0c4b1;
+  font-family: "Inter", sans-serif;
+
   background-image: linear-gradient(
     to bottom right,
     rgb(187, 237, 189),
@@ -35,7 +47,9 @@ body {
     rgb(187, 237, 189)
   );
 }
-
+footer {
+  font-family: "Inter", sans-serif;
+}
 .playlist-item {
   text-align: center;
   color: white;
@@ -45,7 +59,7 @@ body {
   text-align: center;
   padding-left: 20;
   color: white;
-  font-size: 36;
+  font-size: 100%;
   opacity: 85%;
 }
 
