@@ -13,7 +13,7 @@ import * as view from "./view.js";
 const wavesurfer = WaveSurfer.create({
   container: "#waveform",
   waveColor: "white",
-  progressColor: "gray",
+  progressColor: "lightgray",
   backend: "MediaElement",
 });
 
