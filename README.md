@@ -18,6 +18,7 @@ Would like to implement:
 - have now playing information on footer bar
 - Implement curved progress bar to show timer progress
 - Implement "Skip to next mode" button
+- Implement progress bar over timer https://progressbarjs.readthedocs.io/en/latest/
 
 This is a bit of design nightmare at the moment, this is not a priority for me until I've completed the functionality
 
