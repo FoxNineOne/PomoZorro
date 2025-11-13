@@ -2,13 +2,18 @@ export const state = {
   //custom times that hopefully I'll retrieve from end user
   workTime: 25, // This will be set on the page
   restTime: 5, // This  will also be set on the page
-  transTime: 0.1, //transition period time
+  transTime: 10 / 60, //transition period time
   elapsedTime: 0,
   remainingTime: 0,
+  totalTime: function () {
+    return this.elapsedTime + this.remainingTime;
+  },
+
   paused: true,
   prePausedMode: null,
   isRunning: false,
   shouldStop: false,
+  shouldSkip: false,
   intervalId: null,
 
   currentTime: new Date().getTime(),

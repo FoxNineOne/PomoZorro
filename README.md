@@ -7,7 +7,7 @@ Current Status can be viewed here: https://pomozorro.netlify.app/
 The timer allows you two select your own duration of work and resting timess.
 A playlist of Zorro Sombre music plays whilst the timer progresses.
 
-Currently, you can skip and repeat songs, mute and unmute!.
+Currently, you can: - set your times for work and rest - play, skip, stop songs from the playlist - mute audio without pausing timer - skip modes.
 
 Would like to implement:
 
@@ -16,10 +16,6 @@ Would like to implement:
 - show/hide time input buttons
 - have slow flashing of screen elements when on pause mode.
 - have now playing information on footer bar
-- Implement curved progress bar to show timer progress
-- Implement "Skip to next mode" button
-- Implement progress bar over timer https://progressbarjs.readthedocs.io/en/latest/
-
-This is a bit of design nightmare at the moment, this is not a priority for me until I've completed the functionality
+  / Implement curved progress bar to show timer progress (to tweak and finish)
 
 If you wish to skip the clocks and enjoy music alone - https://www.youtube.com/channel/UCUYCs32W4hL2tM9R0FJdPNg

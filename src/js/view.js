@@ -3,6 +3,9 @@ import * as model from "./model.js";
 
 const body = document.body;
 let timerArea = document.getElementById("countdowntimer");
+export let progressBarText =
+  document.getElementsByClassName(".progressBarText");
+
 let clockField = document.getElementById("clockField");
 let modeField = document.getElementById("modeField");
 export let workTime = document.getElementById("workTime");
@@ -13,10 +16,51 @@ export const btnReset = document.getElementById("btnReset");
 export const btnNext = document.getElementById("btnNext");
 export const btnPrev = document.getElementById("btnPrev");
 export const btnSongSkip = document.getElementsByClassName(".songskip");
-export const btnSkipMode = document.getElementById("SkipMode");
+export const btnSkipMode = document.getElementById("btnSkipMode");
 export const btnMute = document.getElementById("btnMute");
 
 export const nowPlaying = document.getElementById("nowPlaying");
+
+export const timeBar = new ProgressBar.SemiCircle("#progressContainer", {
+  strokeWidth: 3,
+  color: "#00bcd4",
+  trailColor: "#eee",
+  duration: 140,
+  text: {
+    // Initial value for text.
+    value: "🦊",
+    color: "white",
+    // Class name for text element.
+    className: "progressBarText",
+  },
+  style: {
+    // Text color.
+    // Default: same as stroke color (options.color)
+    color: "rgba(105, 16, 16, 1)",
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    padding: 0,
+    margin: 0,
+    // You can specify styles which will be browser prefixed
+    transform: {
+      prefix: true,
+      value: "translate(-50%, -50%)",
+    },
+  },
+  svgStyle: {
+    align: "center",
+    // Important: make sure that your container has same
+    // aspect ratio as the SVG canvas. See SVG canvas sizes above.
+    width: "80%",
+  },
+
+  from: { color: "#eee" },
+  to: { color: "#46bff6ff" },
+  step: function (state, circle, attachment) {
+    circle.path.setAttribute("stroke", state.color);
+  },
+});
 
 export function updateDisplay() {
   // Calculate the remaining minutes and seconds
@@ -28,15 +72,32 @@ export function updateDisplay() {
   clockField.textContent = `   ${minutes}:${
     seconds < 10 ? "0" + seconds : seconds
   }`;
+  timeBar.text.textContent = `   ${minutes}:${
+    seconds < 10 ? "0" + seconds : seconds
+  }`;
+  // The first instance returns NAN, ignore this then move on
+  updateProgressBar(model.state.mode);
+}
 
-  // Update the countdown every second (1000 milliseconds)
+export function updateProgressBar(mode) {
+  let progress = "";
+  // console.log(document.querySelector("#progressContainer"));
+  if (mode === "resting") {
+    progress = model.state.elapsedTime / model.state.totalTime();
+  }
+  if (mode === "working" || mode === "transition") {
+    progress = model.state.remainingTime / model.state.totalTime();
+  }
+  if (!isNaN(progress)) {
+    // Update the countdown every second (1000 milliseconds)
+    timeBar.animate(progress);
+  }
 }
 
 export function updateBackground(mode) {
   const colours = {
-    //working: "#4bb3fd",
     working: `linear-gradient(to bottom right, #ffe063ff, #f5d29eac, #ffe063 ,#f5d29eac)`,
-    resting: `linear-gradient(to bottom left,  #c2aff0, #c2aff0, white, #c2aff0)`,
+    resting: `linear-gradient(to bottom left,  #c2aff0, #c2aff0, #ffee91ff, #c2aff0)`,
     transition: `linear-gradient(to top, white, #e2b6cf)`,
     paused: `linear-gradient( to bottom right,
     rgb(187, 237, 189),
@@ -63,5 +124,3 @@ export function resetDisplay() {
   modeField.textContent = ">_<";
   updateBackground("paused");
 }
-
-export function updateButton(button) {}

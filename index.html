@@ -5,14 +5,18 @@
   <link rel="shortcut icon" type="image/png" href="src/img/icon.png" />
   <link rel="stylesheet" href="styles.css" />
   <script src="https://unpkg.com/wavesurfer.js"></script>
-  <script type="module" src="src/js/controller.js"></script>
+  <script defer type="module" src="src/js/controller.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/progressbar.js"></script>
   <title>PomoZorro⌚ | Pomodoro, but Zorro</title>
 </head>
 <div>
   <h1>PomoZorro</h1><h3>A work in progress Pomodoro Timer, by <a target="_blank" href="https://github.com/FoxNineOne/PomoZorro">FoxNineOne</a></h3>
   <br /><br />
   <div id="countdowntimer">
-    <span id="clockField"> Clock </span>
+
+<div id="progressContainer" ></div>
+
+    <span id="clockField" class="hide"> Clock </span>
     <p align="center">_______________</p>
 
     <span id="modeField"> Mode Field </span>

@@ -6,9 +6,10 @@ function convertToMilliseconds(minutes) {
 */
 
 "use strict";
-import * as config from "./config.js";
 import * as model from "./model.js";
 import * as view from "./view.js";
+
+//const progressLine = new ProgressBar.Line("#progressContainer");
 
 const wavesurfer = WaveSurfer.create({
   container: "#waveform",
@@ -124,21 +125,20 @@ function startCountdown(timeLimit, mode) {
       }
       view.updateDisplay(model.state.remainingTime, model.state.screenStatus);
       // If the countdown reaches zero, stop the timer
-      if (model.state.remainingTime <= -1) {
-        //temp, this will change to toggle, (if work, then rest, vice versa)
+      if (model.state.remainingTime <= -1 || model.state.shouldSkip) {
         clockField.textContent = "00:00";
-        clearInterval(model.state.intervalId); // Clear the interval
+        view.timeBar.text.textContent = "00:00";
         model.state.elapsedTime = 0;
-
+        model.state.shouldSkip = 0;
         //BUG: This starts a second early..
-        //modeTransition(screenStatus);
+        clearInterval(model.state.intervalId); // Clear the interval
         resolve();
       }
     }, 1000);
   });
 }
 
-//Loop Function
+//Loop The Modes Function
 async function loopTimers() {
   model.state.shouldStop = false; // Clear stop flag when starting fresh
 
@@ -202,21 +202,23 @@ view.btnPrev.addEventListener("click", function () {
   changeTrack(-1);
 });
 
+view.btnSkipMode.addEventListener("click", function () {
+  model.state.shouldSkip = true;
+});
+
 view.btnMute.addEventListener("click", function (e) {
   // state.mute toggle | if muted , unmute, vice versa
   model.state.isMuted = !model.state.isMuted;
   model.state.isMuted ? wavesurfer.setMuted(true) : wavesurfer.setMuted(false);
   (e.target.class = "btnMute" && model.state.isMuted)
-    ? (btnMute.innerHTML = `
-    <img
+    ? (btnMute.innerHTML = `<img
           src="src/img/btn_mute.png"
           width="50"
           height="50"
           align="center"
           class="btnMute"
         />`)
-    : (btnMute.innerHTML = `
-    <img
+    : (btnMute.innerHTML = `<img
           src="src/img/btn_unmute.png"
           width="50"
           height="50"
@@ -253,6 +255,7 @@ const init = function () {
   clockField.textContent = "00:00";
   modeField.textContent = "press play to begin";
   loadTrack(model.state.currTrackIndex);
+  view.timeBar.set(1);
 };
 
 init();

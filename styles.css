@@ -63,6 +63,18 @@ footer {
   opacity: 85%;
 }
 
+.progressBarText {
+  text-align: center;
+
+  text-emphasis-color: white;
+  text-shadow: #ffb003;
+  color: #ffffff !important;
+
+  font-size: 1000%;
+  font-family: "Roboto", sans-serif;
+  opacity: 85% !important;
+}
+
 #clockField {
   font-weight: bold;
   font-size: 500%;
@@ -75,6 +87,10 @@ footer {
   font-size: 400%;
   display: block;
   opacity: 85%;
+}
+
+.hide {
+  display: none !important;
 }
 
 .input--Number {
