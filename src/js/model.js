@@ -22,7 +22,10 @@ export const state = {
 
   currTrackIndex: 0,
   isMuted: false,
-  volumeLevel: 100,
+  volumeLevel: 1, // 0 - 1
+
+  sndTimeLow: new Audio("src/snd/snd_timeLow.mp3"),
+  sndTimeOut: new Audio("src/snd/snd_timeOut.mp3"),
 };
 
 export const tracklist = [

@@ -114,6 +114,12 @@ function startCountdown(timeLimit, mode) {
     model.state.prePausedMode = model.state.screenStatus; // This is to resume following a pause
     view.updateDisplay(model.state.remainingTime, model.state.screenStatus);
 
+    // variables for time chimes!
+    let lowTimePlayed = false;
+    let timeOutPlayed = false;
+
+    wavesurfer.setVolume(model.state.volumeLevel);
+
     model.state.intervalId = setInterval(() => {
       // If Paused = true.. pause!
       if (model.state.paused) {
@@ -122,15 +128,24 @@ function startCountdown(timeLimit, mode) {
         // Decrease the remaining time by 1 second (1000 milliseconds)
         model.state.remainingTime -= 1000;
         model.state.elapsedTime += 1000;
+
+        // 5-second warning chime
+        if (!lowTimePlayed && model.state.remainingTime <= 10000) {
+          lowTimePlayed = true;
+          model.state.sndTimeLow.play();
+        }
       }
       view.updateDisplay(model.state.remainingTime, model.state.screenStatus);
+
       // If the countdown reaches zero, stop the timer
-      if (model.state.remainingTime <= -1 || model.state.shouldSkip) {
+      if (model.state.remainingTime < 0 || model.state.shouldSkip) {
+        timeOutPlayed = true;
+        model.state.sndTimeOut.play();
         clockField.textContent = "00:00";
         view.timeBar.text.textContent = "00:00";
+
         model.state.elapsedTime = 0;
         model.state.shouldSkip = 0;
-        //BUG: This starts a second early..
         clearInterval(model.state.intervalId); // Clear the interval
         resolve();
       }

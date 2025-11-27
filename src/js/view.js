@@ -28,7 +28,7 @@ export const timeBar = new ProgressBar.SemiCircle("#progressContainer", {
   duration: 140,
   text: {
     // Initial value for text.
-    value: "🦊",
+    value: "",
     color: "white",
     // Class name for text element.
     className: "progressBarText",

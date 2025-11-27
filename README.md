@@ -12,10 +12,10 @@ Currently, you can: - set your times for work and rest - play, skip, stop songs 
 Would like to implement:
 
 - playlist manipulation (change order of playlists, enable/disable songs)
-- volume control overall, and individually for work/rest mode
+- playlist on a separate modal window
+- volume control (overall, and individually for work/rest mode)
 - show/hide time input buttons
 - have slow flashing of screen elements when on pause mode.
 - have now playing information on footer bar
-  / Implement curved progress bar to show timer progress (to tweak and finish)
 
 If you wish to skip the clocks and enjoy music alone - https://www.youtube.com/channel/UCUYCs32W4hL2tM9R0FJdPNg
