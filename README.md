@@ -20,6 +20,7 @@ The inclusion of original music allowed me to explore audio control, user intera
 - JavaScript
 - HTML
 - CSS
+- Audio integration using the HTML Audio and WaveSurferJS APIs
 
 ## Current Features
 - User-configurable work and rest durations
