@@ -1,21 +1,49 @@
 # PomoZorro
 
-A (Work in Progress) Pomodoro timer - with Zorro Sombre music
+## Overview
+PomoZorro is a Pomodoro-style productivity timer that combines focused work sessions with curated background music.
 
-Current Status can be viewed here: https://pomozorro.netlify.app/
+The application features original music produced from my artist alias **Zorro Sombre**, designed to support concentration during work sessions without becoming distracting.
 
-The timer allows you two select your own duration of work and resting timess.
-A playlist of Zorro Sombre music plays whilst the timer progresses.
+This project is a work in progress and is being actively developed alongside my full-time role.
 
-Currently, you can: - set your times for work and rest - play, skip, stop songs from the playlist - mute audio without pausing timer - skip modes.
+## Live Demo
+Current version available at:  
+https://pomozorro.netlify.app/
 
-Would like to implement:
+## Motivation
+I wanted to build a productivity tool that I would personally use, while applying JavaScript fundamentals to a real, user-facing application rather than isolated exercises.
 
-- playlist manipulation (change order of playlists, enable/disable songs)
-- playlist on a separate modal window
-- volume control (overall, and individually for work/rest mode)
-- show/hide time input buttons
-- have slow flashing of screen elements when on pause mode.
-- have now playing information on footer bar
+The inclusion of original music allowed me to explore audio control, user interaction, and application state in a practical way.
 
-If you wish to skip the clocks and enjoy music alone - https://www.youtube.com/channel/UCUYCs32W4hL2tM9R0FJdPNg
+## Tech Stack
+- JavaScript
+- HTML
+- CSS
+
+## Current Features
+- User-configurable work and rest durations
+- Pomodoro-style timer with work / rest cycles
+- Integrated playlist of original music
+- Play, pause, skip, and stop audio playback
+- Mute audio without pausing the timer
+- Skip between work and rest modes
+- Simple, distraction-free interface
+
+## Planned Improvements
+- Playlist manipulation (reorder playlists, enable/disable tracks)
+- Dedicated playlist modal
+- Volume controls (global and per mode)
+- Show / hide time input controls
+- Visual indicators when paused (e.g. subtle flashing elements)
+- “Now Playing” information in the footer
+
+## What I Learned
+- Structuring a JavaScript application beyond small scripts
+- Managing timers, audio playback, and UI state together
+- Designing features incrementally while balancing work and study
+- Building a product that blends technical and creative elements
+
+## How to Run Locally
+1. Clone the repository
+2. Open `index.html` in a browser
